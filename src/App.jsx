@@ -22,8 +22,26 @@ const App = (props) => {
    const centerNumbers = ["4", "5", "6"];
    const bottomNumbers = ["1", "2", "3"];
 
+   const items = [
+      { id: "0", fn: onNumberClick },
+      { id: "AC", fn: onClearClick },
+      { id: "=", fn: onEqaulClick },
+   ]
+
+   const callurates = [
+      { id: "+", fn: onPlusClick },
+      { id: "-", fn: onMinusClick },
+      { id: "x", fn: onMultiplyClick },
+      { id: "/", fn: onDivideClick },
+   ]
+
+   const handleClick = useCallback((e) => {
+      onNumberClick(e);
+   }, [onNumberClick])
+
    return (
       <>
+         <pre>{JSON.stringify(number, null, 4)}</pre>
          <div className="result">
             <Result result={resultText} />
          </div>
@@ -32,14 +50,14 @@ const App = (props) => {
                <div className="upper">
                   {TopNumbers.map(top => (
                      <React.Fragment key={top}>
-                        <Button text={top} onClick={() => onNumberClick(parseInt(top, 10))} />
+                        <Button text={top} onClick={() => handleClick(parseInt(top, 10))} />
                      </React.Fragment>
                   ))}
                </div>
                <div className="middle">
                   {centerNumbers.map(top => (
                      <React.Fragment key={top}>
-                        <Button text={top} onClick={() => onNumberClick(parseInt(top, 10))} />
+                        <Button text={top} onClick={() => handleClick(parseInt(top, 10))} />
                      </React.Fragment>
                   ))}
 
@@ -47,21 +65,30 @@ const App = (props) => {
                <div className="lower">
                   {bottomNumbers.map(top => (
                      <React.Fragment key={top}>
-                        <Button text={top} onClick={() => onNumberClick(parseInt(top, 10))} />
+                        <Button text={top} onClick={() => handleClick(parseInt(top, 10))} />
                      </React.Fragment>
                   ))}
                </div>
                <div className="bottom">
-                  <Button text={"0"} onClick={() => onClearClick(0)} />
-                  <Button text={"AC"} onClick={() => onClearClick()} />
-                  <Button text={"="} onClick={() => onEqaulClick()} />
+                  {items.map(item => (
+                     <React.Fragment key={item.id}>
+                        {item.id === "0" ? (
+                           <Button text={item.id} onClick={() => item.fn(parseInt(item.id))} />
+
+                        ) : (
+                              <Button text={item.id} onClick={() => item.fn()} />
+
+                           )}
+                     </React.Fragment>
+                  ))}
                </div>
             </div>
             <div className="operator">
-               <Button text={"+"} onClick={() => onPlusClick()} />
-               <Button text={"-"} onClick={() => onMinusClick()} />
-               <Button text={"x"} onClick={() => onMultiplyClick()} />
-               <Button text={"/"} onClick={() => onDivideClick()} />
+               {callurates.map(item => (
+                  <React.Fragment key={item.id}>
+                     <Button text={item.id} onClick={() => item.fn()} />
+                  </React.Fragment>
+               ))}
             </div>
          </div>
       </>
