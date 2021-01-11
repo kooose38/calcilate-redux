@@ -1,0 +1,54 @@
+#root{
+   width:200px;
+   margin:auto;
+}
+.result{
+   height: 40px;
+   background:#000;
+
+}
+.resultValue{
+   text-align: end;
+   height: 100%;
+   font-size: 30px;
+   color:#fff;
+   padding-right:15px;
+}
+.button-wrapper{
+   display: flex;
+   justify-content: center;
+   background:#000;
+}
+
+button{
+   border-radius: 50%;
+   width:40px;
+   height:40px;
+   margin: 5px;
+   background-color: #333;
+   color: #fff;
+   font-size: 25px;
+   padding: 0;
+   border:none;
+   transition: .4s;
+   cursor: pointer;
+   user-select: none;
+
+}
+button:hover{
+   background:#eee;
+}
+.operator{
+   display: flex;
+   flex-direction: column;
+   background-color: orange;
+   transition: .5s;
+
+}
+.operator button:hover{
+   background-color: #ffc7af;
+}
+.operator button:focus{
+   background: #fff;
+   color:orange;
+}

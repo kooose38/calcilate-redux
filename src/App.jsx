@@ -1,55 +1,88 @@
-import axios from 'axios';
-import React, { useState } from 'react'
-import ImageList from './components/ImageList';
-import Search from './components/Search'
-import { makeStyles } from "@material-ui/styles";
+import React, { Component, useCallback } from 'react'
+import { connect } from "react-redux";
+import { Button, Result } from './components/'
+import { onClearClick, onDivideClick, onEqaulClick, onMinusClick, onMultiplyClick, onNumberClick, onPlusClick } from './redux/number/actions';
 
-const useStyles = makeStyles({
-   container: {
-      width: 800,
-      margin: "0 auto",
-   }
-})
+const App = (props) => {
+   const {
+      onNumberClick,
+      onPlusClick,
+      onMinusClick,
+      onMultiplyClick,
+      onDivideClick,
+      onEqaulClick,
+      onClearClick,
+      number,
+   } = props;
 
-const App = () => {
-   const classes = useStyles();
-   const [images, setImages] = useState([]);
-   const apiKey = process.env.REACT_APP_PIXABY_APIKEY;
 
-   const TextHandle = async (e) => {
-      try {
-         const params = {
-            key: apiKey,
-            q: e,
-         };
-         const res = await axios.get("https://pixabay.com/api/", { params });
-         if (res.status !== 200) {
-            throw new Error("通信に失敗しました。")
-         }
-         if (res.data.total === 0) {
-            throw new Error("検索ありません。");
-         }
-         setImages(res.data.hits);
-      } catch (e) {
-         alert(e);
-      }
-   };
+   const resultText = number.showingResult ? number.resultValue : number.inputValue;
+
+   const TopNumbers = ["7", "8", "9"];
+   const centerNumbers = ["4", "5", "6"];
+   const bottomNumbers = ["1", "2", "3"];
 
    return (
-      <div className={classes.container} style={{ marginTop: 20 }}>
-         <div>
-            <Search TextHandle={TextHandle} />
-            {
-               images.length > 0 ? (
-                  <ImageList images={images} />
-               ) : (
-                     <h2>Nothing images</h2>
-                  )
-            }
-
+      <>
+         <div className="result">
+            <Result result={resultText} />
          </div>
-      </div>
+         <div className="button-wrapper">
+            <div className="number">
+               <div className="upper">
+                  {TopNumbers.map(top => (
+                     <React.Fragment key={top}>
+                        <Button text={top} onClick={() => onNumberClick(parseInt(top, 10))} />
+                     </React.Fragment>
+                  ))}
+               </div>
+               <div className="middle">
+                  {centerNumbers.map(top => (
+                     <React.Fragment key={top}>
+                        <Button text={top} onClick={() => onNumberClick(parseInt(top, 10))} />
+                     </React.Fragment>
+                  ))}
+
+               </div>
+               <div className="lower">
+                  {bottomNumbers.map(top => (
+                     <React.Fragment key={top}>
+                        <Button text={top} onClick={() => onNumberClick(parseInt(top, 10))} />
+                     </React.Fragment>
+                  ))}
+               </div>
+               <div className="bottom">
+                  <Button text={"0"} onClick={() => onClearClick(0)} />
+                  <Button text={"AC"} onClick={() => onClearClick()} />
+                  <Button text={"="} onClick={() => onEqaulClick()} />
+               </div>
+            </div>
+            <div className="operator">
+               <Button text={"+"} onClick={() => onPlusClick()} />
+               <Button text={"-"} onClick={() => onMinusClick()} />
+               <Button text={"x"} onClick={() => onMultiplyClick()} />
+               <Button text={"/"} onClick={() => onDivideClick()} />
+            </div>
+         </div>
+      </>
    );
+};
+
+const mapStateToProps = (state) => {
+   return {
+      number: state.number,
+   }
+};
+
+const mapDispatchProps = {
+   onNumberClick,
+   onPlusClick,
+   onMinusClick,
+   onMultiplyClick,
+   onDivideClick,
+   onEqaulClick,
+   onClearClick,
+
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchProps)(App);
